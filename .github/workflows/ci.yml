@@ -1,0 +1,40 @@
+name: CI Demo Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-project:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Display project information
+        run: |
+          echo "Starting Continuous Integration pipeline"
+          echo "Repository files:"
+          ls -la
+
+      - name: Verify HTML file exists
+        run: |
+          if [ -f "index.html" ]; then
+            echo "SUCCESS: index.html was found."
+          else
+            echo "ERROR: index.html is missing."
+            exit 1
+          fi
+
+      - name: Check HTML content
+        run: |
+          grep -q "Continuous Integration Demo" index.html
+          echo "SUCCESS: Required webpage content was found."
+
+      - name: Complete pipeline
+        run: echo "All Continuous Integration checks passed successfully."
